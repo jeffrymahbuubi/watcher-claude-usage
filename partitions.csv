@@ -1,0 +1,6 @@
+# Name,   Type, SubType, Offset,  Size, Flags
+# nvs auto-lands at 0x9000 (after bootloader + partition table); 200K matches the
+# board's factory layout so the factory credentials region is preserved in place.
+nvs,      data, nvs,     ,        0x32000,
+phy_init, data, phy,     ,        0x1000,
+factory,  app,  factory, ,        0x300000,

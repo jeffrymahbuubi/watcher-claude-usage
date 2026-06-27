@@ -1,0 +1,201 @@
+dependencies:
+  esp_io_expander_pca95xx_16bit:
+    dependencies:
+    - name: idf
+      version: '>=4.4.2'
+    - name: espressif/esp_io_expander
+      version: 1.0.1
+    source:
+      path: C:\esp\SenseCAP-Watcher-Firmware\components\esp_io_expander_pca95xx_16bit
+      type: local
+    version: 1.0.0
+  espressif/button:
+    component_hash: b115c8797f89b883265441aeedf4973a6d49c53bec55159767cdd9cbcd27f328
+    dependencies:
+    - name: espressif/cmake_utilities
+      registry_url: https://components.espressif.com
+      require: private
+      version: 0.*
+    - name: idf
+      require: private
+      version: '>=4.0'
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 3.2.3
+  espressif/cmake_utilities:
+    component_hash: 351350613ceafba240b761b4ea991e0f231ac7a9f59a9ee901f751bddc0bb18f
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=4.1'
+    source:
+      registry_url: https://components.espressif.com
+      type: service
+    version: 0.5.3
+  espressif/esp_codec_dev:
+    component_hash: 014948481bda426cd46714f297fe1891711246c62bea288863a8cc8cf13ef1f0
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=4.0'
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 1.2.0
+  espressif/esp_io_expander:
+    component_hash: fbc0de4082fc7c207dc98a93a0ed83d1a929a4ecee83cc567afb406f3ee6d4a6
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=4.4.2'
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 1.0.1
+  espressif/esp_lcd_spd2010:
+    component_hash: 379ef3244d182f659d26f3375271508979c3aac08cc7f56e390ef722aa9348a7
+    dependencies:
+    - name: idf
+      require: private
+      version: '>5.0.4,!=5.1.1'
+    - name: espressif/cmake_utilities
+      registry_url: https://components.espressif.com
+      require: private
+      version: 0.*
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 1.0.1
+  espressif/esp_lcd_touch:
+    component_hash: 3f85a7d95af876f1a6ecca8eb90a81614890d0f03a038390804e5a77e2caf862
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=4.4.2'
+    source:
+      registry_url: https://components.espressif.com
+      type: service
+    version: 1.2.1
+  espressif/esp_lcd_touch_spd2010:
+    component_hash: 62f76d1f2c7ba4f11ff51746b8e62269ea4a3d2a774070f9ad606105a560f72f
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=4.4.2'
+    - name: espressif/cmake_utilities
+      registry_url: https://components.espressif.com
+      require: private
+      version: 0.*
+    - name: espressif/esp_lcd_touch
+      registry_url: https://components.espressif.com
+      require: public
+      version: ^1
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 0.0.1
+  espressif/esp_lvgl_port:
+    dependencies:
+    - name: idf
+      version: '>=4.4'
+    - name: lvgl/lvgl
+      override_path: ../lvgl
+    source:
+      path: C:\esp\SenseCAP-Watcher-Firmware\components\esp_lvgl_port
+      type: local
+    version: 1.4.0
+  espressif/knob:
+    component_hash: 82be300874487955cfe47254eebbc1100f6d7d66b647df4bd71e0c0af836d73b
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=4.4.1'
+    - name: espressif/cmake_utilities
+      registry_url: https://components.espressif.com
+      require: private
+      version: 0.*
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 0.1.4
+  espressif/led_strip:
+    component_hash: fc66f8544851132555bc668475f7b68acd6a211c8075db5ce1951cbfa27dfb88
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=4.4'
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 2.5.4
+  idf:
+    source:
+      type: idf
+    version: 5.2.1
+  lvgl/lvgl:
+    dependencies:
+    - name: rlottie
+      override_path: ../rlottie
+    source:
+      path: C:\esp\SenseCAP-Watcher-Firmware\components\lvgl
+      type: local
+    version: 8.4.0
+  rlottie:
+    dependencies: []
+    source:
+      path: C:\esp\SenseCAP-Watcher-Firmware\components\rlottie
+      type: local
+    targets:
+    - esp32s3
+    version: 1.0.0
+  sensecap-watcher:
+    dependencies:
+    - name: idf
+      version: '>=5.2.0'
+    - name: espressif/esp_lvgl_port
+      override_path: ../esp_lvgl_port
+    - name: espressif/esp_lcd_spd2010
+      public: true
+      version: 1.0.1
+    - name: espressif/esp_lcd_touch_spd2010
+      public: true
+      version: 0.0.1
+    - name: espressif/esp_codec_dev
+      public: true
+      version: 1.2.0
+    - name: espressif/led_strip
+      public: true
+      version: 2.5.4
+    - name: espressif/button
+      public: true
+      version: 3.2.3
+    - name: espressif/knob
+      public: true
+      version: 0.1.4
+    - name: sscma_client
+      override_path: ../sscma_client
+    - name: esp_io_expander_pca95xx_16bit
+      override_path: ../esp_io_expander_pca95xx_16bit
+    source:
+      path: C:\esp\SenseCAP-Watcher-Firmware\components\sensecap-watcher
+      type: local
+    targets:
+    - esp32s3
+    version: 1.0.0
+  sscma_client:
+    dependencies:
+    - name: idf
+      version: '>=4.4.2'
+    - name: espressif/esp_io_expander
+      version: ^1.0.1
+    source:
+      path: C:\esp\SenseCAP-Watcher-Firmware\components\sscma_client
+      type: local
+    version: 1.0.2
+direct_dependencies:
+- idf
+- sensecap-watcher
+manifest_hash: 06c7e3664da7902888fe57640ee590b0869f0aaacf963fc2cd668420c0e0de0f
+target: esp32s3
+version: 2.0.0

@@ -1,0 +1,21 @@
+/build/
+sdkconfig
+sdkconfig.old
+# Local-only WiFi credentials — never commit
+main/secrets.h
+
+# ESP-IDF managed components (re-fetched from dependencies.lock)
+managed_components/
+
+# Tooling deps & generated junk
+node_modules/
+tools/**/node_modules/
+
+# Firmware binaries
+*.bin
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

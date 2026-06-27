@@ -1,0 +1,7 @@
+## Pull the SenseCAP Watcher BSP from the cloned reference repo (sibling dir).
+## The BSP transitively provides LVGL, esp_lvgl_port, the SPD2010 LCD/touch
+## drivers, knob/button, RGB LED, and the IO expander.
+dependencies:
+  idf: ">=5.2.0"
+  sensecap-watcher:
+    override_path: "../../SenseCAP-Watcher-Firmware/components/sensecap-watcher"

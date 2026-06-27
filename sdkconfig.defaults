@@ -1,0 +1,51 @@
+# SenseCAP Watcher (ESP32-S3, 8MB octal PSRAM, 32MB flash) — base config.
+CONFIG_IDF_TARGET="esp32s3"
+
+# Flash
+CONFIG_ESPTOOLPY_FLASHSIZE_32MB=y
+CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
+
+# Custom partition table (keeps nvs at 0x9000, matching the board)
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+
+# Octal PSRAM @ 80 MHz (LVGL draw buffers live here)
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_OCT=y
+CONFIG_SPIRAM_SPEED_80M=y
+CONFIG_SPIRAM_MALLOC_ALWAYSINTERNAL=1024
+CONFIG_SPIRAM_MALLOC_RESERVE_INTERNAL=262144
+
+# CPU / scheduler
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_240=y
+CONFIG_FREERTOS_HZ=1000
+
+# app_main runs the provisioning + screenshot call chain (config_t frames + a 1 KB
+# RLE buffer + LVGL); the ~3.5 KB default main-task stack overflows. Give it room.
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+
+# Provisioning HTTP server: phone browsers send a large request-header block
+# (User-Agent + Accept* + sec-ch-ua* + cookies) that exceeds the 512 B default and
+# is rejected as "header fields too long" before our /save handler runs. Raise it.
+CONFIG_HTTPD_MAX_REQ_HDR_LEN=2048
+CONFIG_HTTPD_MAX_URI_LEN=1024
+
+# HTTPS: validate server certs against the bundled public CA roots
+CONFIG_MBEDTLS_CERTIFICATE_BUNDLE=y
+CONFIG_MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL=y
+
+# LVGL port: pin the LVGL task to CPU1 so its SPI flush does NOT contend with
+# the WiFi stack on CPU0 (matches factory_firmware; fixes "spi queue color failed").
+CONFIG_LVGL_PORT_TASK_AFFINITY_CPU1=y
+CONFIG_LVGL_PORT_TASK_PRIORITY=11
+
+# LVGL (display is SPD2010, RGB565 byte-swapped)
+CONFIG_LV_COLOR_16_SWAP=y
+CONFIG_LV_MEM_CUSTOM=y
+CONFIG_LV_MEM_BUF_MAX_NUM=32
+CONFIG_LV_FONT_MONTSERRAT_16=y
+CONFIG_LV_FONT_MONTSERRAT_22=y
+CONFIG_LV_FONT_MONTSERRAT_28=y
+CONFIG_LV_FONT_MONTSERRAT_32=y
+CONFIG_LV_FONT_MONTSERRAT_48=y
+CONFIG_LV_FONT_DEFAULT_MONTSERRAT_12=y
