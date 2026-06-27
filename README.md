@@ -74,10 +74,49 @@ status. A correct `User-Agent: claude-code/<version>` is required or requests la
 bucket.
 
 More detail lives in [`docs/specs/`](docs/specs/) — start with [`SPEC.md`](docs/specs/SPEC.md);
-the full design and the append-only decision log (D1–D32) are in
+the full design and the append-only decision log (D1–D33) are in
 [`02-DESIGN.md`](docs/specs/02-DESIGN.md) and [`03-API-REFERENCE.md`](docs/specs/03-API-REFERENCE.md).
 
+## 💾 First flash on a NEW device — back up its identity FIRST
+
+> **Do this once per physical device, before you ever flash custom firmware or run `erase-flash`.**
+> Every SenseCAP Watcher ships with **unique, per-unit secrets** (`SN`, `EUI`/`BASICID`,
+> `DEVICE_KEY`, `ACCESS_KEY`, `AES_KEY`, `DEV_CTL_KEY`) in its **`nvsfactory`** partition at
+> **`0x9000`** (size `0x32000`, 200 KB). These are **NOT in any public factory image**, so once
+> overwritten they are **gone forever**. Custom/example partition tables relabel `0x9000` as a
+> generic `nvs`, so the app will format it on first boot. (Decision **D9**.)
+
+Run these **read-only, non-destructive** commands first — activate the ESP-IDF environment and use
+your device's flash UART (it was `COM18` here; baud `460800` is reliable on the CH342 bridge,
+`921600` may corrupt):
+
+```bash
+# 1. Full 32 MB image — the gold-standard, bit-for-bit restore
+esptool.py --chip esp32s3 -p COM18 -b 460800 read_flash 0x0 0x2000000 watcher_full_32MB.bin
+
+# 2. Just the unique-credentials partition
+esptool.py --chip esp32s3 -p COM18 -b 460800 read_flash 0x9000 0x32000 nvsfactory.bin
+
+# 3. Record the eFuses (MAC, etc.)
+espefuse.py --chip esp32s3 -p COM18 summary > efuse_summary.txt
+```
+
+**Store these OUTSIDE this repo — they contain live secrets; never commit them.** To restore a
+device later:
+
+```bash
+esptool.py --chip esp32s3 -p COM18 -b 460800 write_flash 0x9000 nvsfactory.bin       # credentials only
+esptool.py --chip esp32s3 -p COM18 -b 460800 write_flash 0x0   watcher_full_32MB.bin  # whole device
+```
+
+> 💡 Each device has its **own** identity — a backup from one unit will **not** restore another.
+> Full rationale, the decoded partition map, and stock-firmware recovery live in
+> [`docs/specs/04-HARDWARE-AND-FLASHING.md`](docs/specs/04-HARDWARE-AND-FLASHING.md) §6.
+
 ## 🔧 Build & flash
+
+> ⚠️ **New device?** Complete the **device-identity backup** (section above) before flashing —
+> it's irreversible once the app overwrites `0x9000`.
 
 **Prerequisites**
 - [ESP-IDF **v5.2.1**](https://docs.espressif.com/projects/esp-idf/en/v5.2.1/esp32s3/get-started/index.html) (target `esp32s3`)
@@ -124,7 +163,7 @@ watcher-claude-usage/
 ├── main/            ← firmware sources (UI, polling, provisioning, audio, secure store)
 ├── tools/           ← helper scripts: icon generation, audio-clip generation, screenshot grabber
 ├── docs/
-│   ├── specs/       ← SPEC.md + 01–07 design docs + decision log (D1–D32)
+│   ├── specs/       ← SPEC.md + 01–07 design docs + decision log (D1–D33)
 │   └── screenshots/ ← captured UI screens
 ├── partitions.csv   ← custom partition table (keeps NVS at 0x9000)
 ├── sdkconfig.defaults
